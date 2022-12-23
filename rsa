@@ -1,95 +1,105 @@
-#!/usr/bin/env bash
+#!/usr/bin/python3
 
-#is a challenge
+"""
 
-check_factor()
+Factorize as many numbers as possible into a product of two smaller numbers.
 
-{
+    Usage: factors <file>
 
-	if [ $# -ne 3 ];
+        where <file> is a file containing natural numbers to factor.
 
-        then
+        One number per line
 
-                args=("$@")
+        You can assume that all lines will be valid natural numbers\
 
-                count=0
+                greater than 1
 
-                num2=1
+        You can assume that there will be no empy line, and no space\
 
-                for a in ${args[*]};
+                before and after the valid number
 
-                do
+        The file will always end with a new line
 
-                        if [ $count -gt 1 ];
+    Output format: n=p*q
 
-                        then
+        one factorization per line
 
-                                num2=$(echo $a*$num2 | bc)
+        p and q don’t have to be prime numbers
 
-                        fi
+        See example
 
-                        count=$((count + 1))
+    You can work on the numbers of the file in the order of your choice
 
-                done
+    Your program should run without any dependency: You will not be ablei\
 
-        else
+            to install anything on the machine we will run your program on
 
-                num2=$3
+    Time limit: Your program will be killed after 5 seconds\
 
-        fi
+            if it hasn’t finish
 
+    Push all your scripts, source code, etc… to your repository
 
+"""
 
-        num1=$2
+# library to get arguments
 
-        num=$(echo "$1" | tr ':' '=')
-
-
-
-        result=$(echo "if($num2 > $num1) 1 else 0" | bc)
-
-	        if ((result == 1)); then
-
-		        numcp=$num1
-
-		        num1=$num2
-
-		        num2=$numcp
-
-                fi
+import sys
 
 
 
-        echo "$num$num1*$num2"
-
-}
 
 
+# fn unpack number factorial
 
-if [ $# -ne 1 ]
+def fc():
 
-then
+    """
 
-        echo 'Usage: rsa <file>'
+    function fc to search file to convert number and format n=p*q
 
-        exit 1
+    """
 
-else
+    try:
+
+        revfile = sys.argv[1]
+
+        with open(revfile) as f:
+
+            for revnumber in f:
+
+                revnumber = int(revnumber)
+
+                if revnumber % 2 == 0:
+
+                        print("{}={}*{}".format(revnumber, revnumber // 2, 2))
+
+                        continue
+
+                i = 3
+
+                while i < revnumber // 2:
+
+                    if revnumber % i == 0:
+
+                        print("{}={}*{}".format(revnumber, revnumber // i, i))
+
+                        break
+
+                    i = i + 2
+
+                if i == (revnumber // 2) + 1:
+
+                    print("{}={}*{}".format(revnumber, revnumber, 1))
+
+    except (IndexError):
+
+        pass
 
 
 
-        while read i
-
-        do
 
 
+# autostart
 
-                result=$(factor "$i")
-
-                check_factor $result
-
-
-
-        done < "$1"
-
-fi
+fc()
